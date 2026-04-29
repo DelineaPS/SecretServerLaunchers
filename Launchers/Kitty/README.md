@@ -1,0 +1,36 @@
+# KiTTY
+
+KiTTY is a fork of PuTTY 0.70 for Microsoft Windows. This launcher uses KiTTY's portable build to do a Telnet session that auto-submits credentials.
+
+## Prerequisites
+
+- A Telnet server listening on port 23 on the destination. (Free option: <https://www.pragmasys.com/telnet-server/download>)
+- KiTTY portable build: <https://github.com/cyd01/KiTTY/releases> — install on the launching machine and use `kitty_portable.exe`.
+- Edit `kitty.ini`:
+  - Find `#commanddelay=2`, uncomment, and set to `commanddelay=1`.
+
+## Template
+
+Duplicate the **Windows Account** template and rename to **Windows Account (Telnet)**.
+
+Add a custom field named `ShortName` — used in place of the target host's full name when the application expects a NetBIOS-style identifier.
+
+## Launcher
+
+| Launcher field | Value |
+|---|---|
+| Process Name | `\\<host>\<Share>\kitty_portable.exe` |
+| Process Arguments | `-telnet $Machine -cmd "$ShortName\$USERNAME\n$PASSWORD\n"` |
+
+Replace `\\<host>\<Share>\` with the UNC path where you've staged `kitty_portable.exe`.
+
+## Template launcher mapping
+
+When adding the launcher to the new template:
+
+| Field | Map to |
+|---|---|
+| Launcher Type | KITTY (your launcher) |
+| Domain | ShortName |
+| Password | Password |
+| Username | Username |

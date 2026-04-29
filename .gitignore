@@ -1,0 +1,15 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*~
+
+# IDE
+.vscode/
+.idea/
+
+# Build artifacts (e.g. compiled AutoIt)
+*.exe
+*.pdb
+*.tmp
