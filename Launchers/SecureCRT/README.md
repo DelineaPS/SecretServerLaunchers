@@ -4,17 +4,15 @@ Two SecureCRT launcher variants: one for installs in `%localappdata%`, one route
 
 ## Variant 1 — Installed in `%localappdata%`
 
+Process launcher that shells through `cmd.exe` so `%localappdata%` is expanded by the shell before `start` resolves the SecureCRT path.
+
 | Launcher field | Value |
 |---|---|
-| Launcher Type | Batch File |
-| Batch contents | `/c start %localappdata%\"VanDyke Software"\SecureCRT\SecureCRT.exe /NOSAVE /SSH2 $MACHINE /L $USERNAME /PASSWORD "$PASSWORD"` |
+| Launcher Type | Process |
+| Process Name | `cmd.exe` |
+| Process Arguments | `/c start "%localappdata%\VanDyke Software\SecureCRT\SecureCRT.exe" /NOSAVE /SSH2 $MACHINE /L $USERNAME /PASSWORD "$PASSWORD"` |
 
-If you'd rather configure this as a Process launcher rather than a batch file, set:
-
-```text
-Process Name:      cmd.exe
-Process Arguments: /c start "%localappdata%\VanDyke Software\SecureCRT\SecureCRT.exe" /NOSAVE /SSH2 $MACHINE /L $USERNAME /PASSWORD "$PASSWORD"
-```
+The double quotes around the SecureCRT install path matter — they handle the space in *VanDyke Software*.
 
 ## Variant 2 — SSH Proxy
 

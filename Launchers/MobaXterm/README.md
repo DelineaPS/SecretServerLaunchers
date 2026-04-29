@@ -1,8 +1,8 @@
 # MobaXterm
 
-Two SSH launcher variants for MobaXterm: password authentication and key-based authentication.
+Two SSH launcher variants for MobaXterm: password authentication (Process launcher) and key-based authentication (Batch file launcher with bundled `.bat`).
 
-## Variant 1 — SSH Password Authentication
+## Variant 1 — SSH Password Authentication (Process launcher)
 
 1. Go to **Admin → Secret Templates → Configure Launchers → New**.
 2. Configure the launcher:
@@ -25,31 +25,23 @@ Adjust the install path as needed.
    - **Username:** Username
    - Save
 
-## Variant 2 — SSH Key Authentication
+## Variant 2 — SSH Key Authentication (Batch file launcher)
 
-The key-auth variant uses a Batch File launcher that downloads the SSH key from Secret Server's API at launch, then opens MobaXterm with `-i` pointing at the downloaded key.
+The key-auth variant uses a Batch File launcher that downloads the SSH key from Secret Server's REST API at launch, then opens MobaXterm with `-i` pointing at the downloaded key. The script is bundled as [`mobaxterm-key.bat`](mobaxterm-key.bat).
 
-> The key is downloaded to `c:\key\id_rsa` and is **not purged** after launch in this script. The key file name is hard-coded; rework if you need it dynamic.
+> [!IMPORTANT]
+> Edit `mobaxterm-key.bat` before uploading: replace `<your-secret-server-host>` (line 14 of the script) with your Secret Server URL.
+>
+> Also note: the key is downloaded to `c:\key\id_rsa` and is **not purged** after the launcher exits. The key file name is hard-coded; rework the script if you need it dynamic.
 
-### Batch file
-
-Save as a Batch File and reference it from the launcher (use Notepad to avoid formatting issues introduced by Notepad++):
-
-```bat
-START PowerShell.exe -noprofile -executionpolicy bypass -windowstyle hidden -command "new-item -path c:\ -name "Key" -itemtype "directory";$SSURL='https://<your-secret-server-host>/secretserver/winauthwebservices/api/v1/secrets/';$URI=$SSURL+'%1';$API=$URI+'/fields/private-key';Invoke-RestMethod -Uri $API -UseDefaultCredentials -Method Get -ContentType "Application/json" -OutFile "c:\key\id_rsa" -force"
-
-cd "c:\Program Files (x86)\Mobatek\MobaXterm\"
-
-START MobaXterm.exe -newtab "ssh -i c:/tempss/id_rsa %2@%3"
-```
-
-Replace `<your-secret-server-host>` with your Secret Server URL.
+See [Batch file launchers](../../README.md#batch-file-launchers) in the top-level README for the upload-and-attach workflow.
 
 ### Launcher settings
 
-| Field | Value |
+| Launcher field | Value |
 |---|---|
-| Launcher Type | Batch File |
+| Launcher Type | Batch file |
+| Batch file | upload [`mobaxterm-key.bat`](mobaxterm-key.bat) |
 | Process Arguments | `$SECRETID $USERNAME $MACHINE` |
 | Use Operating System Shell | Yes |
 
@@ -63,4 +55,4 @@ Associate the launcher with **Unix Account (SSH Key Rotation)** (or whichever SS
 | Password | Private Key Passphrase (unused in this flow) |
 | Username | Username |
 
-Add a custom **SecretID** field to the template (not required). Populate it on each test secret with the Secret ID visible in the URL when editing it. (Future enhancement: derive the Secret ID via additional API calls so this manual step isn't needed.)
+Add a custom **SecretID** field to the template (Text, not required). Populate it on each test secret with the Secret ID visible in the URL when editing it. (Future enhancement: derive the Secret ID via additional API calls so this manual step isn't needed.)

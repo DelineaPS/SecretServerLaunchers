@@ -2,7 +2,7 @@
 
 Map a network drive using a secret's credentials. Two approaches: PowerShell, or a batch-file launcher.
 
-## PowerShell launcher
+## PowerShell launcher (Process)
 
 | Launcher field | Value |
 |---|---|
@@ -21,39 +21,42 @@ Map a network drive using a secret's credentials. Two approaches: PowerShell, or
 
 Adjust the drive letter (`r:`) as needed and add `/persistent:no` if you don't want the mapping kept across logoff.
 
-## Batch-file launcher
+## Batch file launchers
 
-Save a `.bat` file (`NETUSE.BAT`) containing one of the following, then create a Batch File launcher pointing at it.
+Two `.bat` variants are bundled. See [Batch file launchers](../../README.md#batch-file-launchers) in the top-level README for the upload-and-attach workflow.
 
-### NETUSE.BAT — drive letter only
+### `netuse-letter.bat` — drive letter only
+
+[`netuse-letter.bat`](netuse-letter.bat) wraps:
 
 ```bat
 net use m: %1 /user:%2\%3 %4 /p:no
 pause
 ```
 
-### NETUSE2.BAT — quoted paths (handles spaces in path)
+| Launcher field | Value |
+|---|---|
+| Launcher Type | Batch file |
+| Batch file | upload [`netuse-letter.bat`](netuse-letter.bat) |
+| Process Arguments | `$Path $Domain $Username $Password` |
+| Run Process As Secret Credentials | No |
+| Use Operating System Shell | No |
+
+### `netuse-path.bat` — drive letter, tolerates spaces in the UNC path
+
+[`netuse-path.bat`](netuse-path.bat) is the recommended variant from the source document:
 
 ```bat
-net use o: "%1" "%4" /user:"%2\%3" /p:no
+net use m: %1 %4 /user:%2\%3 /p:no
 pause
 ```
 
-> The PDF source notes the second variant should actually be:
->
-> ```bat
-> net use m: %1 %4 /user:%2\%3 /p:no
-> pause
-> ```
->
-> with the `pause` so the operator can see the result before the window closes.
+| Launcher field | Value |
+|---|---|
+| Launcher Type | Batch file |
+| Batch file | upload [`netuse-path.bat`](netuse-path.bat) |
+| Process Arguments | `$Path $Domain $Username $Password` |
+| Run Process As Secret Credentials | No |
+| Use Operating System Shell | No |
 
-### Launcher arguments
-
-When configuring the Batch File launcher, pass arguments in this order to match `%1`-`%4`:
-
-```
-$Path $Domain $Username $Password
-```
-
-Map `Path` to the **Additional Prompt Field Name** so it's prompted at launch time, or to a custom template field if it's stable for that secret.
+In both variants, map `Path` to the **Additional Prompt Field Name** so it's prompted at launch time, or to a custom template field if it's stable for that secret.

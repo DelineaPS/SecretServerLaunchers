@@ -22,6 +22,36 @@ To create a launcher in Secret Server:
 
 Variable references like `$USERNAME`, `$PASSWORD`, `$MACHINE`, `$DOMAIN`, `$URL`, `$PORT`, etc. are Secret Server placeholders that are substituted from the secret at launch time. `$user input` (or **Additional Prompt Field Name**) prompts the user at launch.
 
+## Batch file launchers
+
+Several launchers in this repo are **Batch file** launchers — Secret Server uploads a `.bat` you provide, then runs it with the secret's variables passed as positional arguments (`%1`, `%2`, …) at launch time. This is different from a **Process** launcher, which runs an existing `.exe` directly.
+
+To create a batch-file launcher in Secret Server (full reference: [Creating Custom Launchers](https://docs.delinea.com/online-help/secret-server/launcher-protocol-handler/launchers/procedures/custom-launchers/creating-custom-launchers/index.htm)):
+
+1. **Admin → Secret Templates** (or search **Launchers**) → **Launchers** tab → **Create**.
+2. Set **Launcher type** to **Batch file**.
+3. Give it a **Launcher name** (e.g. `Batch Launcher - Mapped Drive`).
+4. Leave **State** as **Enabled**.
+5. Configure tracking/recording as needed (**Track multiple windows**, **Record additional processes**, **Wrap custom parameters with quotation marks**).
+6. Under **Windows settings**:
+   - **Batch file**: upload the `.bat` from the relevant launcher folder (e.g. [`Launchers/MappedDrives/netuse-letter.bat`](Launchers/MappedDrives/netuse-letter.bat)).
+   - **Process arguments**: the *positional* arguments to pass to the `.bat`, in order — these become `%1`, `%2`, … inside the script. Each launcher's README in this repo documents the expected order. Example: `$Username $Machine $Notes $PrivateKey $PrivateKeyPassphrase`.
+   - **Run process as secret credentials**: usually **No** — the `.bat` already pulls the creds via `%1`/`%2`/`%3`.
+   - **Use Operating System Shell**: usually **No**.
+7. Click **Save**.
+
+Then attach the launcher to a secret template under **Configure Launcher** on the template, and map each `$variable` in **Process Arguments** to the right secret field.
+
+### Batch-file launchers in this repo
+
+| Launcher | Bundled `.bat` |
+|---|---|
+| [ACSiSeriesJava](Launchers/ACSiSeriesJava) | [`launch-acs-iseries.bat`](Launchers/ACSiSeriesJava/launch-acs-iseries.bat) |
+| [ACSLauncher](Launchers/ACSLauncher) | [`launch-acs-positional.bat`](Launchers/ACSLauncher/launch-acs-positional.bat) |
+| [MappedDrives](Launchers/MappedDrives) | [`netuse-letter.bat`](Launchers/MappedDrives/netuse-letter.bat), [`netuse-path.bat`](Launchers/MappedDrives/netuse-path.bat) |
+| [MobaXterm](Launchers/MobaXterm) (SSH key auth) | [`mobaxterm-key.bat`](Launchers/MobaXterm/mobaxterm-key.bat) |
+| [RemoteApp](Launchers/RemoteApp) | [`launch-remoteapp.bat`](Launchers/RemoteApp/launch-remoteapp.bat) |
+
 ## Launchers
 
 | Launcher | Description |

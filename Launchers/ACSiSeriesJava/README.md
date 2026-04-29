@@ -2,25 +2,22 @@
 
 IBM Access Client Solutions (ACS) is a Java application for connecting to IBM i (iSeries) systems. This batch-file launcher chains three `acsbundle.jar` invocations: configure, log on, then 5250 emulation with single sign-on.
 
-## Batch file contents
+## Bundled batch file
 
-```bat
-cls
-@echo off
+[`launch-acs-iseries.bat`](launch-acs-iseries.bat). Adjust the `set home=` line if ACS is installed somewhere other than `C:\Users\Public\IBM\ClientSolutions\`.
 
-Set home=C:\Users\Public\IBM\ClientSolutions\
+## Launcher
 
-java -Xmx1024m -jar %home%\acsbundle.jar /PLUGIN=CFG /SYSTEM=$MACHINE /USERID=$USERNAME /R
+See [Batch file launchers](../../README.md#batch-file-launchers) in the top-level README for the upload-and-attach workflow.
 
-java -Xmx1024m -jar %home%\acsbundle.jar /PLUGIN=logon /SYSTEM=$MACHINE /USERID=$USERNAME /PASSWORD=$PASSWORD
+| Launcher field | Value |
+|---|---|
+| Launcher Type | Batch file |
+| Batch file | upload [`launch-acs-iseries.bat`](launch-acs-iseries.bat) |
+| Process Arguments | `$MACHINE $USERNAME $PASSWORD` |
+| Run Process As Secret Credentials | No |
+| Use Operating System Shell | No |
 
-java -Xmx1024m -jar %home%\acsbundle.jar /PLUGIN=5250 /SYSTEM=$MACHINE /sso=1
-```
+Map the standard secret template fields (Machine, Username, Password) to the corresponding Secret Server variables on the template's launcher configuration.
 
-Adjust `home=` to match your ACS install location.
-
-## Launcher type
-
-Configure as a **Batch File** launcher with the contents above. Map the standard secret template fields (Machine, Username, Password) to the corresponding Secret Server variables.
-
-See also: [ACSLauncher](../ACSLauncher) for the variant that uses positional `%1`/`%2`/`%3`/`%4` parameters instead of inline `$VARIABLE` substitution.
+See also: [ACSLauncher](../ACSLauncher) for a variant that also passes an explicit IP address (useful when the system hostname differs from how clients should resolve it).

@@ -5,8 +5,8 @@ Local-application custom launchers normally rely on the application being instal
 ## Notes
 
 - The remote application must be **pre-approved** on the destination via a registry change (see below).
-- The script assumes `c:\temp` exists. Add a check or `mkdir` if you need it created first.
-- The example targets a single application. You can amend the script to accept the application from a Secret field or user input.
+- The script assumes `c:\temp` exists. Add `if not exist c:\temp mkdir c:\temp` if you need it created on first run.
+- The example targets a single application (`notepad`). Edit the `remoteapplicationprogram:s:notepad` line in the bundled script to launch a different pre-approved application, or amend further to accept the application name from a Secret field or user input.
 
 ## Step 1 — Approve the application on the destination
 
@@ -23,35 +23,11 @@ Adapted from Microsoft's RemoteApp documentation.
    - `Name` — display name
    - `Path` — full path to the application's executable (e.g. `C:\Windows\System32\notepad.exe`)
 
-## Step 2 — Script
+## Step 2 — Bundled batch file
 
-Save as a `.bat` file:
+[`launch-remoteapp.bat`](launch-remoteapp.bat) is the script. It:
 
-```bat
-echo off
-
-(
-echo;remoteapplicationmode:i:1
-echo;remoteapplicationprogram:s:notepad
-echo;disableremoteappcapscheck:i:1
-) > "c:\temp\test1.rdp"
-
-cmdkey /delete:%1 >NUL
-
-cmdkey /generic:%1 /user:%1\%2 /pass:"%3" >NUL
-
-mstsc "c:\temp\test1.rdp" /v:%1
-
-timeout /t 3 >NUL
-
-cmdkey /delete:%1 > NUL
-
-del "c:\temp\test1.rdp"
-```
-
-What each part does:
-
-- **Lines 1–6:** build a `.rdp` file marked as a RemoteApp connection running `notepad`.
+- **Lines 1–6 (the parenthesised echo block):** build a `.rdp` file marked as a RemoteApp connection running `notepad`.
 - **Line 7:** clear any old credentials for this destination.
 - **Line 8:** stage the secret's credentials in Credential Manager.
 - **Line 9:** launch the RDP session against `%1` (the destination).
@@ -60,11 +36,15 @@ What each part does:
 
 ## Step 3 — Launcher
 
-Create a **Batch File** launcher pointing at the script above. Pass arguments in this order to populate `%1`, `%2`, `%3`:
+See [Batch file launchers](../../README.md#batch-file-launchers) in the top-level README for the upload-and-attach workflow.
 
-```
-$MACHINE $USERNAME $PASSWORD
-```
+| Launcher field | Value |
+|---|---|
+| Launcher Type | Batch file |
+| Batch file | upload [`launch-remoteapp.bat`](launch-remoteapp.bat) |
+| Process Arguments | `$MACHINE $USERNAME $PASSWORD` |
+| Run Process As Secret Credentials | No |
+| Use Operating System Shell | No |
 
 When the launcher fires, you'll see a brief RemoteApp window before the destination opens with just the chosen application instead of a full desktop.
 

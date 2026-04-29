@@ -1,27 +1,23 @@
-# ACS Launcher (positional parameters)
+# ACS Launcher (positional parameters with explicit IP address)
 
-Alternate IBM ACS launcher that takes parameters via `%1`, `%2`, `%3`, `%4` rather than inline `$VARIABLE` substitution.
+Alternate IBM ACS launcher that takes a separate `IPADDR` parameter — useful when the system hostname differs from how clients should resolve it (e.g. via a load balancer VIP).
 
-## Batch contents
+## Bundled batch file
 
-```bat
-java -Xmx1024m -jar <loc>IBMiAccess_v1r1\acsbundle.jar /PLUGIN=CFG /SYSTEM=%1 /IPADDR=%4 /USERID=%2 /R
+[`launch-acs-positional.bat`](launch-acs-positional.bat). Replace `<loc>` in the script with the full path to your IBMiAccess install directory (e.g. `C:\Users\Public\IBM\ClientSolutions\`) before uploading.
 
-java -Xmx1024m -jar <loc>IBMiAccess_v1r1\acsbundle.jar /PLUGIN=logon /SYSTEM=%1 /USERID=%2 /PASSWORD=%3
+## Launcher
 
-java -Xmx1024m -jar <loc>IBMiAccess_v1r1\acsbundle.jar /PLUGIN=5250 /SYSTEM=%1 /sso=1
-```
+See [Batch file launchers](../../README.md#batch-file-launchers) in the top-level README for the upload-and-attach workflow.
 
-Replace `<loc>` with the full path to your IBMiAccess install directory (e.g. `C:\Users\Public\IBM\ClientSolutions\`).
+| Launcher field | Value |
+|---|---|
+| Launcher Type | Batch file |
+| Batch file | upload [`launch-acs-positional.bat`](launch-acs-positional.bat) |
+| Process Arguments | `$MACHINE $USERNAME $PASSWORD $IPADDR` |
+| Run Process As Secret Credentials | No |
+| Use Operating System Shell | No |
 
-## Launcher arguments
+`$IPADDR` is a custom field on the secret template. Add it as a Text field if not already present.
 
-When wiring the Batch File launcher into a template, supply arguments in this order:
-
-```
-$MACHINE $USERNAME $PASSWORD $IPADDR
-```
-
-The `$IPADDR` field is a custom template field — useful when the system hostname differs from how clients should resolve to it (e.g. via a load balancer VIP).
-
-See also: [ACSiSeriesJava](../ACSiSeriesJava) for a variant that uses inline `$VARIABLE` substitution.
+See also: [ACSiSeriesJava](../ACSiSeriesJava) for the simpler variant without the explicit IPADDR.
