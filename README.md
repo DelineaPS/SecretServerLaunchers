@@ -30,7 +30,9 @@ Variable references like `$USERNAME`, `$PASSWORD`, `$MACHINE`, `$DOMAIN`, `$URL`
 | [ACSiSeriesJava](Launchers/ACSiSeriesJava) | IBM ACS (Java) launcher for connecting to iSeries / IBM i systems. |
 | [ACSLauncher](Launchers/ACSLauncher) | Alternate ACS launcher that takes parameters via CMD (uses `%1`/`%2`/`%3`/`%4`). |
 | [AutoIT-SSMS-SqlAuth](Launchers/AutoIT-SSMS-SqlAuth) | Workaround for SSMS 18+ which dropped command-line auth — an AutoIt script types creds into the *Connect to Server* dialog. |
+| [AzureMicrosoft365](Launchers/AzureMicrosoft365) | Connect to Azure AD (and other M365 PowerShell modules) using a credential built from the secret. |
 | [Chrome](Launchers/Chrome) | Several Chrome variants: Incognito, launch as other user with URL prompt, multi-URL Web Password template, and launcher whitelisting. |
+| [Couchbase](Launchers/Couchbase) | Browser launcher with a per-cluster URL whitelist for Couchbase clusters. |
 | [Dameware](Launchers/Dameware) | DameWare Mini Remote Control (DWRCC) launcher; supports both direct and centralized-server modes. |
 | [FileZilla](Launchers/FileZilla) | FileZilla SFTP launcher; includes the original variant and an updated 2021 version. |
 | [Firefox-Incognito](Launchers/Firefox-Incognito) | Firefox in private-browsing mode with a prompted URL. |
@@ -40,6 +42,7 @@ Variable references like `$USERNAME`, `$PASSWORD`, `$MACHINE`, `$DOMAIN`, `$URL`
 | [MappedDrives](Launchers/MappedDrives) | Map a network drive using the secret's credentials, via PowerShell or a `.bat` file. |
 | [MMC-RunMSC](Launchers/MMC-RunMSC) | Generic pattern for launching `.msc` consoles against a remote computer. |
 | [MobaXterm](Launchers/MobaXterm) | MobaXterm SSH launchers — password auth and SSH-key auth (with REST call to fetch the private key). |
+| [PowerShellPSSession](Launchers/PowerShellPSSession) | `Enter-PSSession` launcher for remote PowerShell against a Windows / AD secret. |
 | [PuTTY-X11Forwarding](Launchers/PuTTY-X11Forwarding) | The Protocol Handler's bundled PuTTY with `-X` enabled, for X11 forwarding (direct or proxied). |
 | [PuTTY-XmingRDS](Launchers/PuTTY-XmingRDS) | XMing X server + PuTTY for RDS multi-user X11 forwarding (one X-server per user). |
 | [RDP-RestrictedAdmin](Launchers/RDP-RestrictedAdmin) | RDP via `mstsc /restrictedadmin` for situations where the password must not be exposed to the destination. |
