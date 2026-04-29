@@ -1,6 +1,6 @@
 # XMing X Server + PuTTY + X11 Forwarding (RDS multi-user)
 
-X11 forwarding requires an instance of the X server (with its own display number) for each concurrent user. On Remote Desktop Services hosts where multiple users land, this means starting a per-session XMing instance before launching PuTTY.
+X11 forwarding requires an instance of the X server (with its own display number) for each concurrent user. On Remote Desktop Services hosts where multiple users land, this means starting a per-session [XMing](http://www.straightrunning.com/XmingNotes/) instance before launching [PuTTY](https://www.putty.org/).
 
 The bundled [`launch_xming.ps1`](launch_xming.ps1) handles the per-user XMing startup. It picks a free X display, sets `$env:DISPLAY`, launches `Xming.exe`, then opens `putty.exe` against the requested host with `-X` to forward X11.
 
@@ -17,17 +17,18 @@ What the script does:
 5. Starts `C:\Program Files (x86)\Xming\Xming.exe :<n> -multiwindow -clipboard`.
 6. Starts `C:\tools\putty.exe -X -ssh $machine -l $username -pw $password`.
 
-Adjust the hard-coded paths at the bottom of the script if your XMing or PuTTY installs are elsewhere.
+Adjust the hard-coded paths at the bottom of the script if the XMing or PuTTY installs are elsewhere.
 
 ## Template
 
-The built-in **Unix Account (SSH)** template works directly. The Internal source recommends duplicating it and naming it something like **Unix Account (SSH) – X11 Xming** so the launcher only attaches to secrets where X11 forwarding is wanted.
+The built-in **Unix Account (SSH)** template works directly. Consider duplicating it and naming the copy something like **Unix Account (SSH) – X11 Xming** so the launcher only attaches to secrets where X11 forwarding is wanted.
 
-## Create launcher
+## Launcher
 
 | Launcher field | Value |
 |---|---|
 | Launcher Name | `XMING X11 Fwd SSH Non-Proxied` |
+| Launcher Type | Process |
 | Active | Yes |
 | Wrap custom parameters with quotation marks | Yes |
 | Record Multiple Windows | Yes |
@@ -38,18 +39,15 @@ The built-in **Unix Account (SSH)** template works directly. The Internal source
 | Load User Profile | No |
 | Use Operating System Shell | No |
 
-Adjust the script path in **Process Arguments** if you placed `launch_xming.ps1` somewhere other than `C:\Tools`.
+Adjust the script path in **Process Arguments** if `launch_xming.ps1` lives somewhere other than `C:\Tools`.
 
-## Configure template launcher
+## Template launcher mapping
 
-1. **Admin → Secret Templates** → pick the SSH template (or your duplicated one) → **Edit**.
-2. **Configure Launcher** — remove any existing launcher.
-3. **Add New Launcher**.
-4. **Launcher Type to use**: `XMING X11 Fwd SSH Non-Proxied`.
-5. Map fields:
-   - **Machine** → Machine
-   - **Password** → Password
-   - **Username** → Username
-6. Click **Save**.
+| Template field | Map to |
+|---|---|
+| Launcher Type to use | `XMING X11 Fwd SSH Non-Proxied` |
+| Machine | Machine |
+| Password | Password |
+| Username | Username |
 
 Test on an RDS host with two users connected simultaneously to confirm each user gets their own X display number.

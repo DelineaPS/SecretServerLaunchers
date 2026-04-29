@@ -1,12 +1,13 @@
 # UltraVNC
 
-Launches UltraVNC's `vncviewer.exe`, passing username/password and connecting to the secret's machine. Two variants documented for the two common install paths.
+Launches [UltraVNC](https://uvnc.com/)'s `vncviewer.exe`, passing username/password and connecting to the secret's machine. Two variants documented for the two common install paths.
 
 ## Variant 1 — Standard install
 
 | Launcher field | Value |
 |---|---|
 | Launcher Name | `VNC` |
+| Launcher Type | Process |
 | Active | Yes |
 | Process Name | `C:\Program Files (x86)\UltraVNC\vncviewer.exe` |
 | Process Arguments | `/user $USERNAME /password $PASSWORD -connect $MACHINE` |
@@ -19,6 +20,8 @@ Launches UltraVNC's `vncviewer.exe`, passing username/password and connecting to
 | Launcher field | Value |
 |---|---|
 | Launcher Name | `Ultra VNC Launcher` |
+| Launcher Type | Process |
+| Active | Yes |
 | Wrap custom parameters with quotation marks | Yes |
 | Record Multiple Windows | Yes |
 | Process Name | `"C:\Program Files\uvnc bvba\UltraVNC\vncviewer.exe"` |

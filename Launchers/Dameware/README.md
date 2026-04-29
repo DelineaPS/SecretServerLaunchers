@@ -1,15 +1,17 @@
 # Dameware
 
-DameWare Mini Remote Control launcher.
+[DameWare Mini Remote Control](https://www.dameware.com/products/dameware-mini-remote-control) (DWRCC) launcher.
 
-> **Note:** In recent versions of DameWare Mini Remote Control, passing the password through has been observed to fail. Test in your environment before relying on it.
+> [!NOTE]
+> In recent versions of DameWare Mini Remote Control, passing the password through has been observed to fail. Test in your environment before relying on it.
 
 ## Direct (per-workstation install) variant
 
-In Secret Server, go to **Admin → Secret Templates → Configure Launchers** and create a new launcher named **Dameware**.
+In Secret Server, create a new Process launcher named **Dameware**.
 
-| Field | Value |
+| Launcher field | Value |
 |---|---|
+| Launcher Type | Process |
 | Process Name | `C:\Program Files (x86)\SolarWinds\DameWare Remote Support\DWRCC.exe` |
 | Process Arguments | `-c: -h: -a:2 -m:$MACHINE -u:$USERNAME -p:$PASSWORD -d:$DOMAIN` |
 

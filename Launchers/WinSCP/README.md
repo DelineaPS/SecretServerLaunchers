@@ -1,12 +1,13 @@
 # WinSCP
 
-Two variants: a private-key SCP launcher, and an SFTP launcher routed through an SSH proxy.
+[WinSCP](https://winscp.net/) launcher variants — a private-key SCP launcher and an SFTP launcher routed through an SSH proxy.
 
 ## Variant 1 — Private key (SCP)
 
 | Launcher field | Value |
 |---|---|
 | Launcher Name | `WinSCP private key` |
+| Launcher Type | Process |
 | Active | Yes |
 | Process Name | `"C:\Program Files (x86)\WinSCP\WinSCP.exe"` |
 | Process Arguments | `scp://"$USERNAME"@$MACHINE /privatekey="$PRIVATE KEY" /log="C:\Users\administrator.TESTDOMAIN\Desktop\winscp2.log"` |
@@ -14,13 +15,16 @@ Two variants: a private-key SCP launcher, and an SFTP launcher routed through an
 
 Replace the `/log=` path with one writable by the user running the launcher.
 
-The template needs a custom field named `PRIVATE KEY` (file contents of the private key). Populate this from a generated SSH key on the target host.
+### Template fields
+
+Add a custom field named `PRIVATE KEY` (file contents of the private key) on the secret template — populate from a generated SSH key on the target host.
 
 ## Variant 2 — SFTP through an SSH proxy
 
 | Launcher field | Value |
 |---|---|
 | Launcher Name | `WinSCP Proxied Process` |
+| Launcher Type | Process |
 | Active | Yes |
 | Wrap custom parameters with quotation marks | No |
 | Process Name | `C:\Program Files (x86)\WinSCP\WinSCP.exe` |

@@ -9,6 +9,7 @@ Two variants are documented: a verbose PowerShell wrapper that uses `runas`-styl
 | Launcher field | Value |
 |---|---|
 | Launcher Name | `ADUC Launcher` |
+| Launcher Type | Process |
 | Active | Yes |
 | Process Name | `powershell.exe` |
 | Process Arguments | `-noprofile -executionpolicy bypass -windowstyle hidden -command cmd.exe -workingdirectory $PSHOME -credential $USERNAME\$PASSWORD -ArgumentList "/c dsa.msc"` |
@@ -18,20 +19,21 @@ Two variants are documented: a verbose PowerShell wrapper that uses `runas`-styl
 
 ### Secret template fields
 
-| Field Name | Description | Type |
+| Field Name | Type | Description |
 |---|---|---|
-| Domain | The server or location of the Active Directory Domain | Text |
-| Username | The domain username | Text |
-| Password | The password of the domain user | Password |
-| Notes | Any additional notes | Notes |
-| PSHOME | PowerShell home directory | Text |
+| Domain | Text | The server or location of the Active Directory Domain |
+| Username | Text | The domain username |
+| Password | Password | The password of the domain user |
+| Notes | Notes | Any additional notes |
+| PSHOME | Text | PowerShell home directory |
 
-`$PSHOME` is the directory PowerShell is currently running from; it varies per machine. If it's the same across all machines using the launcher, you can hard-code the path inside Process Arguments instead of making it a template field.
+`$PSHOME` is the directory PowerShell is currently running from; it varies per machine. If it's the same across all machines using the launcher, hard-code the path inside Process Arguments instead of making it a template field.
 
 ## Variant 2 — Revised (simpler)
 
 | Launcher field | Value |
 |---|---|
+| Launcher Type | Process |
 | Process Name | `powershell.exe` |
 | Process Arguments | `-Command "dsa.msc"` |
 

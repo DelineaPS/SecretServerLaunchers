@@ -1,6 +1,6 @@
 # SecureCRT
 
-Two SecureCRT launcher variants: one for installs in `%localappdata%`, one routed through an SSH proxy.
+[VanDyke SecureCRT](https://www.vandyke.com/products/securecrt/) launcher variants — one for installs in `%localappdata%`, one routed through an SSH proxy.
 
 ## Variant 1 — Installed in `%localappdata%`
 
@@ -18,6 +18,7 @@ The double quotes around the SecureCRT install path matter — they handle the s
 
 | Launcher field | Value |
 |---|---|
+| Launcher Type | Process |
 | Process Name | `c:\program files\vandyke software\clients\securecrt.exe` |
 | Process Arguments | `/SSH2 /AUTH keyboard-interactive /PASSWORD $PASSWORD /P $PORT /L $USERNAME $HOST` |
 

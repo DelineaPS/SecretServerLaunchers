@@ -9,12 +9,13 @@
 
 | Launcher field | Value |
 |---|---|
+| Launcher Type | Process |
 | Wrap custom parameters with quotation marks | No |
 | Process Name | `C:\Program Files\HeidiSQL\heidisql.exe` |
-| Process Arguments | `-n 0 -h $SERVER -l libmysql.dll -u $USERNAME -p $PASSWORD` |
+| Process Arguments | `-n 0 -h $Server -l libmysql.dll -u $USERNAME -p $PASSWORD` |
 
 `-n 0` selects the network type (0 = MySQL/MariaDB TCP/IP). Change to match your database — see the HeidiSQL docs.
 
 ## Template
 
-Tested with the out-of-the-box **MySQL** template. Add a custom **SERVER** field if not already present.
+Tested with the out-of-the-box **MySQL** template. Add a custom `Server` Text field if not already present.

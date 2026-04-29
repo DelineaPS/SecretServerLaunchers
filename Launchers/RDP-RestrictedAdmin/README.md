@@ -1,18 +1,18 @@
 # RDP Launcher with `/RestrictedAdmin`
 
-Launches `mstsc` with credentials staged in Windows Credential Manager so the password is never sent to the destination, paired with RDP Restricted Admin mode on the destination.
+Launches `mstsc` with credentials staged in Windows Credential Manager, paired with [RDP Restricted Admin mode](https://learn.microsoft.com/troubleshoot/windows-server/remote/restricted-admin-mode-for-rdp) on the destination so a password derived from the secret is never sent over the wire.
 
 > [!WARNING]
-> **Security note from the source document.** This method utilizes RDP Restricted Admin mode, which is **less secure** than not exposing the password at all — as is the case for any custom launcher that passes a `$password` variable, the password can be exposed via Process Monitor or other tools. Only use this when:
+> **Security caveat.** This launcher uses RDP Restricted Admin mode, which is **less secure** than not exposing the password at all — as with any custom launcher that passes a `$PASSWORD` variable, the password can be observed via Process Monitor or similar tools. Only use this when:
 >
 > - You have a business reason to expose the password in Secret Server, **and**
-> - You enforce via group policy that users cannot reuse those credentials elsewhere, **and**
+> - Group policy prevents users from reusing those credentials elsewhere, **and**
 > - You access Secret Server's web UI from a locked-down jump host, **and**
 > - You change the password after each use.
 >
-> Even with one-time-use passwords, the password can be exposed via Process Monitor for the duration of the session, enabling lateral movement if the jump host itself is compromised.
+> Even with one-time-use passwords, the password can be observed for the duration of the session, enabling lateral movement if the jump host itself is compromised.
 
-## Pre-requisite — enable Restricted Admin on the destination
+## Prerequisite — enable Restricted Admin on the destination
 
 On each destination system, set:
 
@@ -21,25 +21,29 @@ HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Lsa
     DisableRestrictedAdmin (DWORD) = 0
 ```
 
-(`DisableRestrictedAdmin` value of `0` means Restricted Admin mode is allowed.)
+(`DisableRestrictedAdmin = 0` means Restricted Admin mode is allowed.)
 
 ## Launcher
 
 | Launcher field | Value |
 |---|---|
-| Launcher Type | PowerShell |
+| Launcher Type | Process |
+| Process Name | `powershell.exe` |
 | Process Arguments | (see below) |
+| Run Process As Secret Credentials | No |
+| Load User Profile | No |
+| Use Operating System Shell | No |
 
 ```powershell
-cmdkey /generic:"$domain" /user:"$username" /pass:"$password"; Start-Process -FilePath "C:\Windows\System32\mstsc.exe" -ArgumentList "/v:$domain"; Start-Sleep -s 30; cmdkey /delete:$domain"
+cmdkey /generic:"$DOMAIN" /user:"$USERNAME" /pass:"$PASSWORD"; Start-Process -FilePath "C:\Windows\System32\mstsc.exe" -ArgumentList "/v:$DOMAIN"; Start-Sleep -s 30; cmdkey /delete:$DOMAIN
 ```
 
 What each step does:
 
-1. `cmdkey /generic:...` — stages the secret's username and password in Windows Credential Manager keyed by `$domain`.
-2. `Start-Process mstsc.exe /v:$domain` — launches RDP to the host. Windows pulls the just-stored credentials from Credential Manager.
+1. `cmdkey /generic:...` — stages the secret's username and password in Windows Credential Manager keyed by `$DOMAIN`.
+2. `Start-Process mstsc.exe /v:$DOMAIN` — launches RDP to the host. Windows pulls the just-stored credentials from Credential Manager.
 3. `Start-Sleep -s 30` — waits 30 seconds so the user has time to accept the RDP connection prompt.
-4. `cmdkey /delete:$domain` — removes the staged credentials from Credential Manager.
+4. `cmdkey /delete:$DOMAIN` — removes the staged credentials from Credential Manager.
 
 ## Template
 
@@ -53,4 +57,4 @@ In Secret Server's **Advanced Configuration**, set:
 RDP Launcher Use Computer Name for Domain   True
 ```
 
-(Should be enabled by default in modern releases.)
+(Enabled by default in modern releases.)

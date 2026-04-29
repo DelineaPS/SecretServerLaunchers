@@ -1,6 +1,6 @@
 # Inbuilt PuTTY Launcher + X11 Forwarding
 
-Wraps the PuTTY that ships with the Secret Server Protocol Handler so X11 forwarding (`-X`) is enabled — the built-in PuTTY launcher does not enable this by default.
+Wraps the [PuTTY](https://www.putty.org/) that ships with the Secret Server Protocol Handler so X11 forwarding (`-X`) is enabled — the built-in PuTTY launcher does not enable this by default.
 
 Two flavors depending on whether the connection is direct or proxied.
 
@@ -8,6 +8,7 @@ Two flavors depending on whether the connection is direct or proxied.
 
 | Launcher field | Value |
 |---|---|
+| Launcher Type | Process |
 | Process Name | `"C:\Program Files\Thycotic Software Ltd\Secret Server Protocol Handler\putty.exe"` |
 | Process Arguments | `-ssh "$USERNAME"@"$MACHINE" -pw $PASSWORD -X` |
 
@@ -15,6 +16,7 @@ Two flavors depending on whether the connection is direct or proxied.
 
 | Launcher field | Value |
 |---|---|
+| Launcher Type | Process |
 | Process Name | `"C:\Program Files\Thycotic Software Ltd\Secret Server Protocol Handler\putty.exe"` |
 | Process Arguments | `-ssh "$USERNAME"@"$HOST" -pw $PASSWORD -X` |
 

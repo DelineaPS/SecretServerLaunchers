@@ -1,6 +1,8 @@
-# Azure / Microsoft 365 PowerShell
+# Azure AD / Microsoft 365 PowerShell
 
-Launcher pattern for connecting to Azure or Microsoft 365 PowerShell modules using credentials managed by Secret Server. The launcher starts `powershell.exe`, imports the relevant module, and calls the module's `Connect-*` cmdlet with a `[pscredential]` built from the secret's Username, Domain, and Password.
+Process launcher for connecting to Microsoft cloud services via PowerShell using credentials managed by Secret Server. The launcher starts `powershell.exe`, imports a module, and calls its `Connect-*` cmdlet with a `[pscredential]` built from the secret's Username, Domain, and Password.
+
+A working **AzureAD** example is documented below. The same `[pscredential]::new(...)` pattern adapts to other modules — see [Other modules](#other-modules) for candidates and PR-able gaps.
 
 > [!IMPORTANT]
 > When configuring PowerShell process launchers, use **double quotes** around the command — *not* curly braces. Curly braces cause PowerShell to echo the command (and the substituted username/password) to the console, exposing the credentials.
@@ -33,7 +35,7 @@ The out-of-the-box **Office 365 Account** template covers most Azure / M365 modu
 
 ## Process Arguments
 
-### AzureAD module (`AzureAD`)
+### AzureAD module ([`AzureAD`](https://learn.microsoft.com/powershell/module/azuread/))
 
 ```powershell
 -NoExit -Command "Import-Module AzureAd; Connect-AzureAd -Credential ([pscredential]::new('$USERNAME@$DOMAIN',(ConvertTo-SecureString -String '$PASSWORD' -AsPlainText -Force)));Clear-Host;Clear-History;"
@@ -45,11 +47,11 @@ The out-of-the-box **Office 365 Account** template covers most Azure / M365 modu
 
 The same `[pscredential]::new(...)` pattern works for many other Azure/M365 modules. PRs welcome — likely candidates:
 
-- **Exchange Online**: `ExchangeOnlineManagement` → `Connect-ExchangeOnline -Credential $cred`
-- **Microsoft Teams**: `MicrosoftTeams` → `Connect-MicrosoftTeams -Credential $cred`
-- **MSOnline (legacy)**: `MSOnline` → `Connect-MsolService -Credential $cred`
-- **SharePoint PnP**: `PnP.PowerShell` → `Connect-PnPOnline -Url $URL -Credentials $cred` (add a `URL` field on the template)
-- **Azure Az**: `Az.Accounts` → `Connect-AzAccount -Credential $cred`
+- **Exchange Online**: [`ExchangeOnlineManagement`](https://learn.microsoft.com/powershell/exchange/exchange-online-powershell-v2) → `Connect-ExchangeOnline -Credential $cred`
+- **Microsoft Teams**: [`MicrosoftTeams`](https://learn.microsoft.com/microsoftteams/teams-powershell-overview) → `Connect-MicrosoftTeams -Credential $cred`
+- **MSOnline (legacy)**: [`MSOnline`](https://learn.microsoft.com/powershell/module/msonline/) → `Connect-MsolService -Credential $cred`
+- **SharePoint PnP**: [`PnP.PowerShell`](https://pnp.github.io/powershell/) → `Connect-PnPOnline -Url $URL -Credentials $cred` (add a `URL` field on the template)
+- **Azure Az**: [`Az.Accounts`](https://learn.microsoft.com/powershell/azure/) → `Connect-AzAccount -Credential $cred`
 
 > [!NOTE]
 > Some of these modules now require certificate-based / app-only auth instead of a username/password credential — the credential pattern shown above only works for tenants that still allow basic auth or where the account isn't subject to MFA / Conditional Access.

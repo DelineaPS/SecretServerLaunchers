@@ -1,14 +1,15 @@
 # LDP
 
-Microsoft's `ldp.exe` LDAP/AD diagnostics tool. Two variants documented depending on where `ldp.exe` lives.
+Microsoft's [`LDP.exe`](https://learn.microsoft.com/troubleshoot/windows-server/identity/ldp-overview) LDAP/AD diagnostics tool. Two variants documented depending on where `ldp.exe` lives.
 
 ## Variant 1 — From a roaming-profile directory
 
-Useful when `ldp.exe` is dropped into the user's `%localappdata%`.
+For machines where `ldp.exe` is dropped into the user's `%localappdata%`.
 
 | Launcher field | Value |
 |---|---|
 | Launcher Name | `ldp.exe %localappdata% test` |
+| Launcher Type | Process |
 | Active | Yes |
 | Process Name | `cmd` |
 | Process Arguments | `/c %localappdata%\test\ldp.exe` |
@@ -23,6 +24,7 @@ For machines where `ldp.exe` is installed in the standard location.
 | Launcher field | Value |
 |---|---|
 | Launcher Name | `LDP Launcher` |
+| Launcher Type | Process |
 | Active | Yes |
 | Wrap custom parameters with quotation marks | No |
 | Record Multiple Windows | Yes |

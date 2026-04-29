@@ -1,16 +1,16 @@
 # RemoteApp
 
-Local-application custom launchers normally rely on the application being installed locally. With the standard RDP launcher you can connect to an endpoint and manually launch an app, but it's inconvenient. This launcher starts an RDP session whose shell is set to a single, pre-approved RemoteApp.
+Local-application custom launchers normally rely on the application being installed locally. With the standard RDP launcher you can connect to an endpoint and manually launch an app, but it's inconvenient. This launcher starts an RDP session whose shell is set to a single, pre-approved [RemoteApp](https://learn.microsoft.com/windows-server/remote/remote-desktop-services/clients/remote-desktop-allow-access).
 
 ## Notes
 
 - The remote application must be **pre-approved** on the destination via a registry change (see below).
-- The script assumes `c:\temp` exists. Add `if not exist c:\temp mkdir c:\temp` if you need it created on first run.
+- The script assumes `c:\temp` exists. Add `if not exist c:\temp mkdir c:\temp` if needed.
 - The example targets a single application (`notepad`). Edit the `remoteapplicationprogram:s:notepad` line in the bundled script to launch a different pre-approved application, or amend further to accept the application name from a Secret field or user input.
 
 ## Step 1 — Approve the application on the destination
 
-Adapted from Microsoft's RemoteApp documentation.
+Adapted from Microsoft's RemoteApp documentation:
 
 1. Open `regedit` and navigate to:
    ```
@@ -46,8 +46,8 @@ See [Batch file launchers](../../README.md#batch-file-launchers) in the top-leve
 | Run Process As Secret Credentials | No |
 | Use Operating System Shell | No |
 
-When the launcher fires, you'll see a brief RemoteApp window before the destination opens with just the chosen application instead of a full desktop.
+When the launcher fires, a brief RemoteApp window appears before the destination opens with just the chosen application instead of a full desktop.
 
 ## Troubleshooting
 
-If you sometimes see "credentials did not work" prompts that resolve when you re-enter the password, adjust the local (or GPO) security settings per [this guide](https://www.thewindowsclub.com/your-credentials-did-not-work-in-remote-desktop-on-windows-10).
+If "credentials did not work" prompts appear that resolve when the password is re-entered, adjust the local (or GPO) security settings per [this guide](https://www.thewindowsclub.com/your-credentials-did-not-work-in-remote-desktop-on-windows-10).

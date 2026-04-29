@@ -1,12 +1,13 @@
 # Firefox Incognito (Private Mode)
 
-Launches Firefox in private-browsing mode at a prompted URL.
+Launches [Firefox](https://www.mozilla.org/firefox/) in private-browsing mode at a prompted URL.
 
 | Launcher field | Value |
 |---|---|
 | Launcher Name | `Launch Firefox in Private Mode` |
+| Launcher Type | Process |
 | Active | Yes |
-| Additional Prompt Field Name | `$URL` |
+| Additional Prompt Field Name | `URL` |
 | Wrap custom parameters with quotation marks | Yes |
 | Record Multiple Windows | Yes |
 | Process Name | `C:\Program Files\Mozilla Firefox\firefox.exe` |

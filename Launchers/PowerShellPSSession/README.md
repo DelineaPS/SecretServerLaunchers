@@ -1,9 +1,9 @@
 # PowerShell — `Enter-PSSession`
 
-Launches a remote PowerShell session against a prompted hostname using the secret's Windows / Active Directory credentials.
+Launches a remote PowerShell session via [`Enter-PSSession`](https://learn.microsoft.com/powershell/module/microsoft.powershell.core/enter-pssession) against a prompted hostname using the secret's Windows / Active Directory credentials.
 
 > [!IMPORTANT]
-> **Hostname must be FQDN or NETBIOS name, not an IP address.** `Enter-PSSession` uses Kerberos by default, which requires a name (so it can resolve a Service Principal Name). Connecting by IP fails with `WinRM cannot process the request` unless you pre-stage the host in TrustedHosts and switch to NTLM — out of scope for this launcher.
+> **Hostname must be FQDN or NETBIOS name, not an IP address.** `Enter-PSSession` uses Kerberos by default, which requires a name (so it can resolve a Service Principal Name). Connecting by IP fails with `WinRM cannot process the request` unless the host is pre-staged in TrustedHosts and authentication is switched to NTLM — out of scope for this launcher.
 
 ## Prerequisite
 
@@ -14,6 +14,7 @@ The destination host must have PowerShell remoting enabled (`Enable-PSRemoting`)
 | Launcher field | Value |
 |---|---|
 | Launcher Name | `Powershell - Enter-PSSession` |
+| Launcher Type | Process |
 | Active | Yes |
 | Use Additional Prompt | Yes |
 | Additional Prompt Field Name | `HOSTNAME` |
@@ -26,19 +27,16 @@ The destination host must have PowerShell remoting enabled (`Enable-PSRemoting`)
 | Load User Profile | Yes |
 | Use Operating System Shell | No |
 
-The doubled `""` quotes around `$HOSTNAME` in the Process Arguments are intentional — they survive PowerShell's two-stage parsing so the substituted hostname is correctly quoted in the inner `Enter-PSSession` invocation.
+The doubled `""` quotes around `$HOSTNAME` in **Process Arguments** are intentional — they survive PowerShell's two-stage parsing so the substituted hostname is correctly quoted in the inner `Enter-PSSession` invocation.
 
 ## Template launcher mapping
 
 Use a Windows or Active Directory secret template (the launcher needs Run-as-secret-credentials, which requires a Windows-style identity).
 
-1. **Admin → Secret Templates** → pick your template → **Edit**.
-2. **Configure Launcher** — if there's an existing launcher, remove it.
-3. **Add New Launcher**.
-4. **Launcher Type to use**: `Powershell - Enter-PSSession`.
-5. Map fields:
-   - **Domain** → Domain
-   - **HOSTNAME** → `<user input>`
-   - **Password** → Password
-   - **Username** → Username
-6. Click **Save**.
+| Template field | Map to |
+|---|---|
+| Launcher Type to use | `Powershell - Enter-PSSession` |
+| Domain | Domain |
+| HOSTNAME | `<user input>` |
+| Password | Password |
+| Username | Username |

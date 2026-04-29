@@ -1,10 +1,10 @@
 # KiTTY
 
-KiTTY is a fork of PuTTY 0.70 for Microsoft Windows. This launcher uses KiTTY's portable build to do a Telnet session that auto-submits credentials.
+[KiTTY](https://github.com/cyd01/KiTTY) is a fork of PuTTY 0.70 for Microsoft Windows. This launcher uses KiTTY's portable build to do a Telnet session that auto-submits credentials.
 
 ## Prerequisites
 
-- A Telnet server listening on port 23 on the destination. (Free option: <https://www.pragmasys.com/telnet-server/download>)
+- A Telnet server listening on port 23 on the destination. (Free option: <https://www.pragmasys.com/telnet-server/download>.)
 - KiTTY portable build: <https://github.com/cyd01/KiTTY/releases> — install on the launching machine and use `kitty_portable.exe`.
 - Edit `kitty.ini`:
   - Find `#commanddelay=2`, uncomment, and set to `commanddelay=1`.
@@ -19,18 +19,17 @@ Add a custom field named `ShortName` — used in place of the target host's full
 
 | Launcher field | Value |
 |---|---|
+| Launcher Type | Process |
 | Process Name | `\\<host>\<Share>\kitty_portable.exe` |
-| Process Arguments | `-telnet $Machine -cmd "$ShortName\$USERNAME\n$PASSWORD\n"` |
+| Process Arguments | `-telnet $MACHINE -cmd "$ShortName\$USERNAME\n$PASSWORD\n"` |
 
-Replace `\\<host>\<Share>\` with the UNC path where you've staged `kitty_portable.exe`.
+Replace `\\<host>\<Share>\` with the UNC path where `kitty_portable.exe` is staged.
 
 ## Template launcher mapping
 
-When adding the launcher to the new template:
-
-| Field | Map to |
+| Template field | Map to |
 |---|---|
-| Launcher Type | KITTY (your launcher) |
+| Launcher Type to use | KITTY (this launcher) |
 | Domain | ShortName |
 | Password | Password |
 | Username | Username |

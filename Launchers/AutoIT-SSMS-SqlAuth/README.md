@@ -1,6 +1,6 @@
 # Using AutoIt to launch SSMS 18+ with SQL Authentication
 
-SSMS 18+ removed support for `-P` (password) on the command line. This launcher works around that by using [AutoIt](https://www.autoitscript.com/) to type credentials into SSMS's *Connect to Server* dialog programmatically, then clicking **Connect**.
+[SSMS](https://learn.microsoft.com/sql/ssms/sql-server-management-studio-ssms) 18+ removed support for `-P` (password) on the command line. This launcher works around that by using [AutoIt](https://www.autoitscript.com/) to type credentials into SSMS's *Connect to Server* dialog programmatically, then clicking **Connect**.
 
 The launcher is a session connector + child launcher pair so the AutoIt executable runs on a Remote Desktop Services host rather than every user's workstation.
 
@@ -16,14 +16,14 @@ The launcher is a session connector + child launcher pair so the AutoIt executab
    |---|---|
    | Launcher Type | Process |
    | Process Name | `c:\autoit\ssms-sql-auth.exe` |
-   | Process Arguments | `"$Server" "$Username" "$Password"` |
+   | Process Arguments | `"$Server" "$USERNAME" "$PASSWORD"` |
 
-6. **Wrap with a session-connector launcher** so it runs through your RDS host. In the parent (session-connector) launcher's settings, choose the child launcher you just made.
+6. **Wrap with a session-connector launcher** so the script runs through the RDS host. In the parent (session-connector) launcher's settings, choose the child launcher from step 5.
 7. **Create a secret template** with `Server`, `Username`, `Password` fields and attach the session-connector launcher.
 
 ## Script
 
-[`ssms-sql-auth.au3`](ssms-sql-auth.au3) — written by Simon Hughes. Adjust the SSMS path at the top of the script to match your install:
+[`ssms-sql-auth.au3`](ssms-sql-auth.au3) — written by Simon Hughes. Adjust the SSMS path at the top of the script to match the install:
 
 ```au3
 $Path = "C:\Program Files (x86)\Microsoft SQL Server Management Studio 18\Common7\IDE\Ssms.exe"
